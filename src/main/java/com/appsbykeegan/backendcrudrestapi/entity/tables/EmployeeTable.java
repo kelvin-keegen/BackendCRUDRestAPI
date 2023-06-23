@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 @Entity
 @Table(name = "employee")
-public class EmployeeClass {
+public class EmployeeTable {
 
     @SequenceGenerator(
             name = "employee_sequence",
@@ -28,12 +28,24 @@ public class EmployeeClass {
     private Long employeeId;
     private String employeeFirstName;
     private String employeeLastName;
+    @Enumerated(EnumType.STRING)
     private EmployeeGender employeeGender;
-    private String StartDate;
+    private String startDate;
+    @Enumerated(EnumType.STRING)
     private EmployeeRole employeeRole;
     private String emailAddress;
 
     @ManyToOne
     @JoinColumn(name = "departmentId",nullable = false)
-    private DepartmentClass departmentClass;
+    private DepartmentTable departmentTable;
+
+    public EmployeeTable(String employeeFirstName, String employeeLastName, EmployeeGender employeeGender, String startDate, EmployeeRole employeeRole, String emailAddress, DepartmentTable departmentTable) {
+        this.employeeFirstName = employeeFirstName;
+        this.employeeLastName = employeeLastName;
+        this.employeeGender = employeeGender;
+        this.startDate = startDate;
+        this.employeeRole = employeeRole;
+        this.emailAddress = emailAddress;
+        this.departmentTable = departmentTable;
+    }
 }
