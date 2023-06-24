@@ -2,7 +2,7 @@ package com.appsbykeegan.backendcrudrestapi.entity.models.records;
 
 import com.appsbykeegan.backendcrudrestapi.entity.models.enums.EmployeeGender;
 import com.appsbykeegan.backendcrudrestapi.entity.models.enums.EmployeeRole;
-import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentTable;
+import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentEntity;
 
 public record EmployeeGenericTemplate(
         String employeeFirstName,
@@ -11,6 +11,6 @@ public record EmployeeGenericTemplate(
         String startDate,
         EmployeeRole employeeRole,
         String emailAddress,
-        DepartmentTable departmentEntity
+        DepartmentEntity departmentEntity
 ) {
 }

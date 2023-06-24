@@ -1,15 +1,18 @@
 package com.appsbykeegan.backendcrudrestapi.controller;
 
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.DepartmentGenericTemplate;
+import com.appsbykeegan.backendcrudrestapi.entity.models.records.DepartmentRequestBody;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.EmployeeGenericTemplate;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.ResponseTemplate;
 import com.appsbykeegan.backendcrudrestapi.service.DepartmentService;
 import com.appsbykeegan.backendcrudrestapi.service.EmployeeService;
+import com.appsbykeegan.backendcrudrestapi.utility.MyUtilityClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -21,41 +24,48 @@ public class RestAPIController {
 
     private final DepartmentService departmentService;
     private final EmployeeService employeeService;
+    private final MyUtilityClass myUtilityClass;
 
     @GetMapping(path = "/")
     public ResponseTemplate appStatusChecker() {
 
-        LocalDateTime timeNow = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String stringOfTime = dateTimeFormatter.format(timeNow);
-
-        return new ResponseTemplate(HttpStatus.OK,"health is Ok", "Server Time: "+stringOfTime);
+        return new ResponseTemplate(HttpStatus.OK,"health is Ok", "Server Time: "+myUtilityClass.getServerCurrentTime());
     }
 
     // ### Department endpoints ###
 
     @PostMapping(path = "/department/create")
-    public ResponseTemplate createDepartment() {
+    public ResponseTemplate createDepartment(@RequestBody DepartmentRequestBody departmentRequestBody) {
 
-        return null;
+        return departmentService.createDepartmentEntry(departmentRequestBody);
     }
 
     @GetMapping(path = "/department/retrieve")
-    public ResponseTemplate retrieveDepartment() {
+    public ResponseTemplate retrieveDepartment(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) Boolean returnAll) {
 
-        return null;
+        return departmentService.retrieveDepartmentObject(name,id,returnAll);
     }
 
     @PutMapping(path = "/department/update")
-    public ResponseTemplate updateDepartmentDetails() {
+    public ResponseTemplate updateDepartmentDetails(
+            @RequestParam(required = false) String departmentName,
+            @RequestParam(required = false) int departmentFloorNumber,
+            @RequestParam(required = false) String departmentDescription,
+            @RequestParam(required = false) BigDecimal departmentBudget,
+            @RequestParam(required = false) Long id) {
 
-        return null;
+        return departmentService.updateDepartmentObject(departmentName, departmentFloorNumber, departmentDescription, departmentBudget, id);
     }
 
     @DeleteMapping(path = "/department/delete")
-    public ResponseTemplate deleteDepartment() {
+    public ResponseTemplate deleteDepartment(
+            @RequestParam String name,
+            @RequestParam(required = false) Long id) {
 
-        return null;
+        return departmentService.deleteDepartmentObject(name,id);
     }
 
     // ### Employee endpoints ###

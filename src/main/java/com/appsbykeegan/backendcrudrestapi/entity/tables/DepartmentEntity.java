@@ -13,7 +13,7 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "department")
-public class DepartmentTable {
+public class DepartmentEntity {
 
     @SequenceGenerator(
             name = "department_sequence",
@@ -33,10 +33,10 @@ public class DepartmentTable {
     private BigDecimal departmentBudget;
     private String departmentCreationDate;
 
-    @OneToMany(mappedBy = "departmentTable",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private Set<EmployeeTable> employees;
+    @OneToMany(mappedBy = "departmentEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Set<EmployeeEntity> employees;
 
-    public DepartmentTable(String departmentName, int departmentFloorNumber, String departmentDescription, BigDecimal departmentBudget, String departmentCreationDate) {
+    public DepartmentEntity(String departmentName, int departmentFloorNumber, String departmentDescription, BigDecimal departmentBudget, String departmentCreationDate) {
         this.departmentName = departmentName;
         this.departmentFloorNumber = departmentFloorNumber;
         this.departmentDescription = departmentDescription;

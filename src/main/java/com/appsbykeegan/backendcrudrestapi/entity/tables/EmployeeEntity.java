@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 @Entity
 @Table(name = "employee")
-public class EmployeeTable {
+public class EmployeeEntity {
 
     @SequenceGenerator(
             name = "employee_sequence",
@@ -37,15 +37,15 @@ public class EmployeeTable {
 
     @ManyToOne
     @JoinColumn(name = "departmentId",nullable = false)
-    private DepartmentTable departmentTable;
+    private DepartmentEntity departmentEntity;
 
-    public EmployeeTable(String employeeFirstName, String employeeLastName, EmployeeGender employeeGender, String startDate, EmployeeRole employeeRole, String emailAddress, DepartmentTable departmentTable) {
+    public EmployeeEntity(String employeeFirstName, String employeeLastName, EmployeeGender employeeGender, String startDate, EmployeeRole employeeRole, String emailAddress, DepartmentEntity departmentEntity) {
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.employeeGender = employeeGender;
         this.startDate = startDate;
         this.employeeRole = employeeRole;
         this.emailAddress = emailAddress;
-        this.departmentTable = departmentTable;
+        this.departmentEntity = departmentEntity;
     }
 }
