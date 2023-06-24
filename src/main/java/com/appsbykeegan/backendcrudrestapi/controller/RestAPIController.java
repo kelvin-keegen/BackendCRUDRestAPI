@@ -1,9 +1,8 @@
 package com.appsbykeegan.backendcrudrestapi.controller;
 
-import com.appsbykeegan.backendcrudrestapi.entity.models.records.DepartmentGenericTemplate;
-import com.appsbykeegan.backendcrudrestapi.entity.models.records.DepartmentRequestBody;
-import com.appsbykeegan.backendcrudrestapi.entity.models.records.EmployeeGenericTemplate;
-import com.appsbykeegan.backendcrudrestapi.entity.models.records.ResponseTemplate;
+import com.appsbykeegan.backendcrudrestapi.entity.models.enums.EmployeeRole;
+import com.appsbykeegan.backendcrudrestapi.entity.models.records.*;
+import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentEntity;
 import com.appsbykeegan.backendcrudrestapi.service.DepartmentService;
 import com.appsbykeegan.backendcrudrestapi.service.EmployeeService;
 import com.appsbykeegan.backendcrudrestapi.utility.MyUtilityClass;
@@ -13,8 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,7 +26,7 @@ public class RestAPIController {
     @GetMapping(path = "/")
     public ResponseTemplate appStatusChecker() {
 
-        return new ResponseTemplate(HttpStatus.OK,"health is Ok", "Server Time: "+myUtilityClass.getServerCurrentTime());
+        return new ResponseTemplate(HttpStatus.OK.value(),"health is Ok", "Server Time: "+myUtilityClass.getServerCurrentTime());
     }
 
     // ### Department endpoints ###
@@ -71,27 +68,40 @@ public class RestAPIController {
     // ### Employee endpoints ###
 
     @PostMapping(path = "/employee/create")
-    public ResponseTemplate createEmployee() {
+    public ResponseTemplate createEmployee(@RequestBody EmployeeRequestBody employeeRequestBody) {
 
-        return null;
+        return employeeService.createEmployeeEntry(employeeRequestBody);
     }
 
     @GetMapping(path = "/employee/retrieve")
-    public ResponseTemplate retrieveEmployee() {
+    public ResponseTemplate retrieveEmployee(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) Boolean returnAll) {
 
-        return null;
+        return employeeService.retrieveEmployeeObject(firstName,lastName,returnAll,id);
     }
 
     @PutMapping(path = "/employee/update")
-    public ResponseTemplate updateEmployee() {
+    public ResponseTemplate updateEmployee(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) EmployeeRole employeeRole,
+            @RequestParam(required = false) String emailAddress,
+            @RequestParam(required = false) DepartmentEntity department,
+            @RequestParam(required = false) Long id) {
 
-        return null;
+        return employeeService.updateEmployeeObject(firstName,lastName,employeeRole,emailAddress,department,id);
     }
 
     @DeleteMapping(path = "/employee/delete")
-    public ResponseTemplate deleteEmployee() {
+    public ResponseTemplate deleteEmployee(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) Long id) {
 
-        return null;
+        return employeeService.deleteEmployeeObject(firstName,lastName,id);
     }
 
     // ### Generic endpoints ###
@@ -100,13 +110,13 @@ public class RestAPIController {
     @GetMapping(path = "/department/retrieve_mock")
     public ResponseTemplate retrieveDepartment_mock() {
 
-        return new ResponseTemplate(HttpStatus.OK,"", new DepartmentGenericTemplate(null,0,null,null,null));
+        return new ResponseTemplate(HttpStatus.OK.value(),"", new DepartmentGenericTemplate(null,0,null,null,null));
     }
 
     // empty json object of Employee
     @GetMapping(path = "/employee/retrieve_mock")
     public ResponseTemplate retrieveEmployee_mock() {
 
-        return new ResponseTemplate(HttpStatus.OK,"", new EmployeeGenericTemplate(null,null,null,null,null,null,null));
+        return new ResponseTemplate(HttpStatus.OK.value(),"", new EmployeeGenericTemplate(null,null,null,null,null,null,null));
     }
 }

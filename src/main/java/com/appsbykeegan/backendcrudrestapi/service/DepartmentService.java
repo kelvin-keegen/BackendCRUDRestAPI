@@ -33,7 +33,14 @@ public class DepartmentService {
 
         departmentRepository.save(department);
 
-        return new ResponseTemplate(HttpStatus.OK.hashCode(),"Object created",department);
+        return new ResponseTemplate(HttpStatus.OK.value(),"Object created",department);
+    }
+
+    public ResponseTemplate retrieveDepartmentObject(String name, Long id, Boolean returnAll) {
+
+        List<DepartmentEntity> departmentObjects = departmentRepository.findAll();
+
+        return new ResponseTemplate(HttpStatus.OK.value(),"returned list",departmentObjects);
     }
 
     public ResponseTemplate updateDepartmentObject(String departmentName, int departmentFloorNumber, String departmentDescription, BigDecimal departmentBudget, Long id) {
@@ -48,16 +55,8 @@ public class DepartmentService {
 
         departmentRepository.save(department);
 
-        return new ResponseTemplate(HttpStatus.OK.hashCode(),"Updated Object",department);
+        return new ResponseTemplate(HttpStatus.OK.value(),"Updated Object",department);
     }
-
-    public ResponseTemplate retrieveDepartmentObject(String name, Long id, Boolean returnAll) {
-
-        List<DepartmentEntity> departmentObjects = departmentRepository.findAll();
-
-        return new ResponseTemplate(HttpStatus.OK.hashCode(),"returned list",departmentObjects);
-    }
-
 
     public ResponseTemplate deleteDepartmentObject(String name, Long id) {
 
@@ -66,7 +65,7 @@ public class DepartmentService {
 
         departmentRepository.delete(department);
 
-        return new ResponseTemplate(HttpStatus.OK.hashCode(),"Object Deleted",null);
+        return new ResponseTemplate(HttpStatus.OK.value(),"Object Deleted",null);
     }
 
 
