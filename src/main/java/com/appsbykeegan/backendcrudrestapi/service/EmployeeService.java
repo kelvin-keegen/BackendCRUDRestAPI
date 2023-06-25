@@ -1,6 +1,7 @@
 package com.appsbykeegan.backendcrudrestapi.service;
 
 import com.appsbykeegan.backendcrudrestapi.entity.models.enums.EmployeeRole;
+import com.appsbykeegan.backendcrudrestapi.entity.models.records.DepartmentRequestBody;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.EmployeeRequestBody;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.ResponseTemplate;
 import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentEntity;
@@ -12,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,14 @@ public class EmployeeService {
 
     public ResponseTemplate createEmployeeEntry(EmployeeRequestBody employeeRequestBody) {
 
+        DepartmentEntity departmentEntity = new DepartmentEntity(
+                employeeRequestBody.departmentRequestBody().departmentName(),
+                employeeRequestBody.departmentRequestBody().departmentFloorNumber(),
+                employeeRequestBody.departmentRequestBody().departmentDescription(),
+                employeeRequestBody.departmentRequestBody().departmentBudget(),
+                myUtilityClass.getServerCurrentTime()
+        );
+
         EmployeeEntity employee = new EmployeeEntity(
                 employeeRequestBody.employeeFirstName(),
                 employeeRequestBody.employeeLastName(),
@@ -32,10 +43,14 @@ public class EmployeeService {
                 myUtilityClass.getServerCurrentTime(),
                 employeeRequestBody.employeeRole(),
                 employeeRequestBody.emailAddress(),
-                employeeRequestBody.departmentEntity()
+                departmentEntity
         );
 
-        departmentRepository.save(employee.getDepartmentEntity());
+        Set<EmployeeEntity> employeeEntitySet = new HashSet<>();
+        employeeEntitySet.add(employee);
+
+        departmentEntity.setEmployees(employeeEntitySet);
+        departmentRepository.save(departmentEntity);
 
         return new ResponseTemplate(HttpStatus.OK.value(),"Object Created",employee);
     }
@@ -48,7 +63,7 @@ public class EmployeeService {
     }
 
     public ResponseTemplate updateEmployeeObject(String firstName, String lastName, EmployeeRole employeeRole,
-                                                 String emailAddress, DepartmentEntity department, Long id) {
+                                                 String emailAddress, DepartmentRequestBody department, Long id) {
 
         EmployeeEntity employee = null;
 
@@ -70,7 +85,16 @@ public class EmployeeService {
             employee.setEmailAddress(emailAddress);
         }
         if (department != null) {
-            employee.setDepartmentEntity(department);
+
+            DepartmentEntity departmentEntity = new DepartmentEntity(
+                    department.departmentName(),
+                    department.departmentFloorNumber(),
+                    department.departmentDescription(),
+                    department.departmentBudget(),
+                    myUtilityClass.getServerCurrentTime()
+            );
+
+            employee.setDepartmentEntity(departmentEntity);
         }
 
         employeeRepository.save(employee);

@@ -89,7 +89,7 @@ public class RestAPIController {
             @RequestParam(required = false) String lastName,
             @RequestParam(required = false) EmployeeRole employeeRole,
             @RequestParam(required = false) String emailAddress,
-            @RequestParam(required = false) DepartmentEntity department,
+            @RequestParam(required = false) DepartmentRequestBody department,
             @RequestParam(required = false) Long id) {
 
         return employeeService.updateEmployeeObject(firstName,lastName,employeeRole,emailAddress,department,id);

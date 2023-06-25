@@ -1,5 +1,6 @@
 package com.appsbykeegan.backendcrudrestapi.entity.tables;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,6 +34,7 @@ public class DepartmentEntity {
     private BigDecimal departmentBudget;
     private String departmentCreationDate;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "departmentEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<EmployeeEntity> employees;
 
