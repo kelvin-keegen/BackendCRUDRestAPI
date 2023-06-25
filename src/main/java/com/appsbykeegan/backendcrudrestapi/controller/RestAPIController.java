@@ -2,7 +2,6 @@ package com.appsbykeegan.backendcrudrestapi.controller;
 
 import com.appsbykeegan.backendcrudrestapi.entity.models.enums.EmployeeRole;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.*;
-import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentEntity;
 import com.appsbykeegan.backendcrudrestapi.service.DepartmentService;
 import com.appsbykeegan.backendcrudrestapi.service.EmployeeService;
 import com.appsbykeegan.backendcrudrestapi.utility.MyUtilityClass;
