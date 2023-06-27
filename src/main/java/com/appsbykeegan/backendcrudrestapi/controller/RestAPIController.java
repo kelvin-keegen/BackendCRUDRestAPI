@@ -74,12 +74,10 @@ public class RestAPIController {
 
     @GetMapping(path = "/employee/retrieve")
     public ResponseTemplate retrieveEmployee(
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String email,
             @RequestParam(required = false) Boolean returnAll) {
 
-        return employeeService.retrieveEmployeeObject(firstName,lastName,returnAll,id);
+        return employeeService.retrieveEmployeeObject(email,returnAll);
     }
 
     @PutMapping(path = "/employee/update")
@@ -88,19 +86,16 @@ public class RestAPIController {
             @RequestParam(required = false) String lastName,
             @RequestParam(required = false) EmployeeRole employeeRole,
             @RequestParam(required = false) String emailAddress,
-            @RequestParam(required = false) DepartmentRequestBody department,
-            @RequestParam(required = false) Long id) {
+            @RequestParam(required = false) DepartmentRequestBody department) {
 
-        return employeeService.updateEmployeeObject(firstName,lastName,employeeRole,emailAddress,department,id);
+        return employeeService.updateEmployeeObject(firstName,lastName,employeeRole,emailAddress,department);
     }
 
     @DeleteMapping(path = "/employee/delete")
     public ResponseTemplate deleteEmployee(
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) Long id) {
+            @RequestParam String email) {
 
-        return employeeService.deleteEmployeeObject(firstName,lastName,id);
+        return employeeService.deleteEmployeeObject(email);
     }
 
     // ### Generic endpoints ###

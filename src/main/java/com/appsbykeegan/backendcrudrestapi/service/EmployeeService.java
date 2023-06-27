@@ -55,21 +55,25 @@ public class EmployeeService {
         return new ResponseTemplate(HttpStatus.OK.value(),"Object Created",employee);
     }
 
-    public ResponseTemplate retrieveEmployeeObject(String firstName, String lastName, Boolean returnAll, Long id) {
+    public ResponseTemplate retrieveEmployeeObject(String email, Boolean returnAll) {
 
+        if (!returnAll) {
+            EmployeeEntity employee = employeeRepository.findByEmailAddress(email)
+                    .orElseThrow(NoSuchElementException::new);
+        }
         List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
 
         return new ResponseTemplate(HttpStatus.OK.value(),"returned entities",employeeEntities);
     }
 
     public ResponseTemplate updateEmployeeObject(String firstName, String lastName, EmployeeRole employeeRole,
-                                                 String emailAddress, DepartmentRequestBody department, Long id) {
+                                                 String emailAddress, DepartmentRequestBody department) {
 
         EmployeeEntity employee = null;
 
-        if (!firstName.isEmpty() && !lastName.isEmpty()) {
+        if (!emailAddress.isEmpty()) {
 
-            employee = employeeRepository.findByEmployeeFirstNameAndEmployeeLastName(firstName,lastName)
+            employee = employeeRepository.findByEmailAddress(emailAddress)
                     .orElseThrow(NoSuchElementException::new);
         }
 
@@ -78,11 +82,16 @@ public class EmployeeService {
             throw new IllegalStateException("employee variable was not assigned correctly");
         }
 
+        if (firstName != null) {
+            employee.setEmployeeFirstName(firstName);
+        }
+
+        if (lastName != null) {
+            employee.setEmployeeLastName(lastName);
+        }
+
         if (employeeRole != null) {
             employee.setEmployeeRole(employeeRole);
-        }
-        if (emailAddress != null) {
-            employee.setEmailAddress(emailAddress);
         }
         if (department != null) {
 
@@ -102,14 +111,19 @@ public class EmployeeService {
         return new ResponseTemplate(HttpStatus.OK.value(),"Object Updated",employee);
     }
 
-    public ResponseTemplate deleteEmployeeObject(String firstName, String lastName, Long id) {
+    public ResponseTemplate deleteEmployeeObject(String email) {
 
         EmployeeEntity employee = null;
 
-        if (!firstName.isEmpty() && !lastName.isEmpty()) {
+        if (!email.isEmpty()) {
 
-            employee = employeeRepository.findByEmployeeFirstNameAndEmployeeLastName(firstName,lastName)
+            employee = employeeRepository.findByEmailAddress(email)
                     .orElseThrow(NoSuchElementException::new);
+        }
+
+        if (employee == null) {
+
+            throw new NullPointerException("employee object is empty and not assigned properly");
         }
 
         employeeRepository.delete(employee);
