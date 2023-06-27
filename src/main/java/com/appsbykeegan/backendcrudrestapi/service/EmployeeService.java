@@ -9,6 +9,7 @@ import com.appsbykeegan.backendcrudrestapi.entity.tables.EmployeeEntity;
 import com.appsbykeegan.backendcrudrestapi.repository.DepartmentRepository;
 import com.appsbykeegan.backendcrudrestapi.repository.EmployeeRepository;
 import com.appsbykeegan.backendcrudrestapi.utility.MyUtilityClass;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,14 @@ public class EmployeeService {
                 employeeRequestBody.emailAddress(),
                 departmentEntity
         );
+
+        String emailOfEmployee = employeeRequestBody.emailAddress();
+
+        if (emailOfEmployee.equals(employeeRepository.findByEmailAddress(emailOfEmployee).get().getEmailAddress())) {
+
+            throw new EntityExistsException("Employee of email: "+emailOfEmployee+" already exists in the database");
+
+        }
 
         Set<EmployeeEntity> employeeEntitySet = new HashSet<>();
         employeeEntitySet.add(employee);

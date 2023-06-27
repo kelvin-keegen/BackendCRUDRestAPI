@@ -5,6 +5,7 @@ import com.appsbykeegan.backendcrudrestapi.entity.models.records.ResponseTemplat
 import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentEntity;
 import com.appsbykeegan.backendcrudrestapi.repository.DepartmentRepository;
 import com.appsbykeegan.backendcrudrestapi.utility.MyUtilityClass;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,13 @@ public class DepartmentService {
                 departmentRequestBody.departmentBudget(),
                 myUtilityClass.getServerCurrentTime()
         );
+
+        String deptName = departmentRequestBody.departmentName();
+
+        if (deptName.equals(departmentRepository.findByDepartmentName(deptName).get().getDepartmentName())) {
+
+            throw new EntityExistsException("Department of name: "+deptName+" already exists in the database");
+        }
 
         departmentRepository.save(department);
 
