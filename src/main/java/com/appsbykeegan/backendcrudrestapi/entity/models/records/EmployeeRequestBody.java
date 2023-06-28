@@ -10,6 +10,6 @@ public record EmployeeRequestBody(
         EmployeeGender employeeGender,
         EmployeeRole employeeRole,
         String emailAddress,
-        DepartmentRequestBody departmentRequestBody
+        String departmentName
 ) {
 }

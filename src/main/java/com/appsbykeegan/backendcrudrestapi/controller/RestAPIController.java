@@ -1,6 +1,5 @@
 package com.appsbykeegan.backendcrudrestapi.controller;
 
-import com.appsbykeegan.backendcrudrestapi.entity.models.enums.EmployeeRole;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.*;
 import com.appsbykeegan.backendcrudrestapi.service.DepartmentService;
 import com.appsbykeegan.backendcrudrestapi.service.EmployeeService;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,21 +37,15 @@ public class RestAPIController {
     @GetMapping(path = "/department/retrieve")
     public ResponseTemplate retrieveDepartment(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) Long id,
             @RequestParam(required = false) Boolean returnAll) {
 
-        return departmentService.retrieveDepartmentObject(name,id,returnAll);
+        return departmentService.retrieveDepartmentObject(name,returnAll);
     }
 
     @PutMapping(path = "/department/update")
-    public ResponseTemplate updateDepartmentDetails(
-            @RequestParam(required = false) String departmentName,
-            @RequestParam(required = false) int departmentFloorNumber,
-            @RequestParam(required = false) String departmentDescription,
-            @RequestParam(required = false) BigDecimal departmentBudget,
-            @RequestParam(required = false) Long id) {
+    public ResponseTemplate updateDepartmentDetails(@RequestBody DepartmentRequestBody departmentRequestBody) {
 
-        return departmentService.updateDepartmentObject(departmentName, departmentFloorNumber, departmentDescription, departmentBudget, id);
+        return departmentService.updateDepartmentObject(departmentRequestBody);
     }
 
     @DeleteMapping(path = "/department/delete")
@@ -82,13 +74,9 @@ public class RestAPIController {
 
     @PutMapping(path = "/employee/update")
     public ResponseTemplate updateEmployee(
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) EmployeeRole employeeRole,
-            @RequestParam(required = false) String emailAddress,
-            @RequestParam(required = false) DepartmentRequestBody department) {
+            @RequestBody EmployeeRequestBody employeeRequestBody) {
 
-        return employeeService.updateEmployeeObject(firstName,lastName,employeeRole,emailAddress,department);
+        return employeeService.updateEmployeeObject(employeeRequestBody);
     }
 
     @DeleteMapping(path = "/employee/delete")

@@ -1,7 +1,5 @@
 package com.appsbykeegan.backendcrudrestapi.service;
 
-import com.appsbykeegan.backendcrudrestapi.entity.models.enums.EmployeeRole;
-import com.appsbykeegan.backendcrudrestapi.entity.models.records.DepartmentRequestBody;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.EmployeeRequestBody;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.ResponseTemplate;
 import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentEntity;
@@ -14,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,13 +24,18 @@ public class EmployeeService {
 
     public ResponseTemplate createEmployeeEntry(EmployeeRequestBody employeeRequestBody) {
 
-        DepartmentEntity departmentEntity = new DepartmentEntity(
-                employeeRequestBody.departmentRequestBody().departmentName(),
-                employeeRequestBody.departmentRequestBody().departmentFloorNumber(),
-                employeeRequestBody.departmentRequestBody().departmentDescription(),
-                employeeRequestBody.departmentRequestBody().departmentBudget(),
-                myUtilityClass.getServerCurrentTime()
-        );
+        Optional<DepartmentEntity> optionalDepartment;
+
+        String emailOfEmployee = employeeRequestBody.emailAddress();
+        String deptName = employeeRequestBody.departmentName();
+
+        optionalDepartment = departmentRepository.findByDepartmentName(deptName);
+
+        if (optionalDepartment.isEmpty()){
+
+            throw new EntityExistsException("Department of name: "+deptName+" is not recognised");
+
+        }
 
         EmployeeEntity employee = new EmployeeEntity(
                 employeeRequestBody.employeeFirstName(),
@@ -44,45 +44,46 @@ public class EmployeeService {
                 myUtilityClass.getServerCurrentTime(),
                 employeeRequestBody.employeeRole(),
                 employeeRequestBody.emailAddress(),
-                departmentEntity
+                optionalDepartment.get()
         );
 
-        String emailOfEmployee = employeeRequestBody.emailAddress();
+        Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findByEmailAddress(emailOfEmployee);
 
-        if (emailOfEmployee.equals(employeeRepository.findByEmailAddress(emailOfEmployee).get().getEmailAddress())) {
+        if (optionalEmployeeEntity.isPresent()){
 
             throw new EntityExistsException("Employee of email: "+emailOfEmployee+" already exists in the database");
-
         }
 
         Set<EmployeeEntity> employeeEntitySet = new HashSet<>();
         employeeEntitySet.add(employee);
 
-        departmentEntity.setEmployees(employeeEntitySet);
-        departmentRepository.save(departmentEntity);
+        optionalDepartment.get().setEmployees(employeeEntitySet);
+        departmentRepository.save(optionalDepartment.get());
 
         return new ResponseTemplate(HttpStatus.OK.value(),"Object Created",employee);
     }
 
     public ResponseTemplate retrieveEmployeeObject(String email, Boolean returnAll) {
 
-        if (!returnAll) {
+        if (email != null) {
             EmployeeEntity employee = employeeRepository.findByEmailAddress(email)
                     .orElseThrow(NoSuchElementException::new);
+
+            return new ResponseTemplate(HttpStatus.OK.value(),"returned object",employee);
         }
         List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
 
         return new ResponseTemplate(HttpStatus.OK.value(),"returned entities",employeeEntities);
     }
 
-    public ResponseTemplate updateEmployeeObject(String firstName, String lastName, EmployeeRole employeeRole,
-                                                 String emailAddress, DepartmentRequestBody department) {
+    public ResponseTemplate updateEmployeeObject(EmployeeRequestBody employeeRequestBody) {
 
         EmployeeEntity employee = null;
+        String email = employeeRequestBody.emailAddress();
 
-        if (!emailAddress.isEmpty()) {
+        if (!email.isEmpty()) {
 
-            employee = employeeRepository.findByEmailAddress(emailAddress)
+            employee = employeeRepository.findByEmailAddress(email)
                     .orElseThrow(NoSuchElementException::new);
         }
 
@@ -91,28 +92,17 @@ public class EmployeeService {
             throw new IllegalStateException("employee variable was not assigned correctly");
         }
 
-        if (firstName != null) {
-            employee.setEmployeeFirstName(firstName);
+        if (employeeRequestBody.employeeFirstName() != null) {
+            employee.setEmployeeFirstName(employeeRequestBody.employeeFirstName());
         }
-
-        if (lastName != null) {
-            employee.setEmployeeLastName(lastName);
+        if (employeeRequestBody.employeeLastName() != null) {
+            employee.setEmployeeLastName(employeeRequestBody.employeeLastName());
         }
-
-        if (employeeRole != null) {
-            employee.setEmployeeRole(employeeRole);
+        if (employeeRequestBody.employeeRole() != null) {
+            employee.setEmployeeRole(employeeRequestBody.employeeRole());
         }
-        if (department != null) {
-
-            DepartmentEntity departmentEntity = new DepartmentEntity(
-                    department.departmentName(),
-                    department.departmentFloorNumber(),
-                    department.departmentDescription(),
-                    department.departmentBudget(),
-                    myUtilityClass.getServerCurrentTime()
-            );
-
-            employee.setDepartmentEntity(departmentEntity);
+        if (employeeRequestBody.employeeGender() != null) {
+            employee.setEmployeeGender(employeeRequestBody.employeeGender());
         }
 
         employeeRepository.save(employee);
