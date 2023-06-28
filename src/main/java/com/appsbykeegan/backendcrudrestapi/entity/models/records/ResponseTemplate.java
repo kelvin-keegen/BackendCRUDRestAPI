@@ -1,7 +1,7 @@
 package com.appsbykeegan.backendcrudrestapi.entity.models.records;
 
 public record ResponseTemplate(
-        Object statusCode,
+        int statusCode,
         String message,
         Object data
 
