@@ -1,6 +1,8 @@
 package com.appsbykeegan.backendcrudrestapi.controller;
 
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.*;
+import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentEntity;
+import com.appsbykeegan.backendcrudrestapi.entity.tables.EmployeeEntity;
 import com.appsbykeegan.backendcrudrestapi.service.DepartmentService;
 import com.appsbykeegan.backendcrudrestapi.service.EmployeeService;
 import com.appsbykeegan.backendcrudrestapi.utility.MyUtilityClass;
@@ -92,13 +94,13 @@ public class RestAPIController {
     @GetMapping(path = "/department/retrieve_mock")
     public ResponseTemplate retrieveDepartment_mock() {
 
-        return new ResponseTemplate(HttpStatus.OK.value(),"", new DepartmentGenericTemplate(null,0,null,null,null));
+        return new ResponseTemplate(HttpStatus.OK.value(),"", new DepartmentEntity(null,0,null,null,null));
     }
 
     // empty json object of Employee
     @GetMapping(path = "/employee/retrieve_mock")
     public ResponseTemplate retrieveEmployee_mock() {
 
-        return new ResponseTemplate(HttpStatus.OK.value(),"", new EmployeeGenericTemplate(null,null,null,null,null,null,null));
+        return new ResponseTemplate(HttpStatus.OK.value(),"", new EmployeeEntity(null,null,null,null,null,null,null));
     }
 }

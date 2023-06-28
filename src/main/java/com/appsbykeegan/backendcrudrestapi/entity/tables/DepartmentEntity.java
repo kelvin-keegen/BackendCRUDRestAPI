@@ -35,7 +35,7 @@ public class DepartmentEntity {
     private String departmentCreationDate;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "departmentEntity",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<EmployeeEntity> employees;
 
     public DepartmentEntity(String departmentName, int departmentFloorNumber, String departmentDescription, BigDecimal departmentBudget, String departmentCreationDate) {

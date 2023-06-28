@@ -37,15 +37,15 @@ public class EmployeeEntity {
 
     @ManyToOne
     @JoinColumn(name = "departmentId",nullable = false)
-    private DepartmentEntity departmentEntity;
+    private DepartmentEntity department;
 
-    public EmployeeEntity(String employeeFirstName, String employeeLastName, EmployeeGender employeeGender, String startDate, EmployeeRole employeeRole, String emailAddress, DepartmentEntity departmentEntity) {
+    public EmployeeEntity(String employeeFirstName, String employeeLastName, EmployeeGender employeeGender, String startDate, EmployeeRole employeeRole, String emailAddress, DepartmentEntity department) {
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.employeeGender = employeeGender;
         this.startDate = startDate;
         this.employeeRole = employeeRole;
         this.emailAddress = emailAddress;
-        this.departmentEntity = departmentEntity;
+        this.department = department;
     }
 }
