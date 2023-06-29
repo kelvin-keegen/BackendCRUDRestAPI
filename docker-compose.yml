@@ -1,0 +1,53 @@
+services:
+
+  db:
+
+    ports:
+      - 5432:5432
+
+    image: postgres
+
+    container_name: rest_api_db
+
+    environment:
+      - POSTGRES_DB=company_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+
+    volumes:
+      - /custom/mount:/var/lib/postgresql/data
+
+    restart: unless-stopped
+
+  backend:
+
+    ports:
+      - 7070:7070
+
+    image: kelvinkeegen17/crud-rest-api
+
+    container_name: rest_api
+
+    environment:
+      db-url: jdbc:postgresql://db:5432/company_db
+      db-username: postgres
+      db-password: root
+
+    depends_on:
+      - db
+
+    restart: unless-stopped
+
+  frontend:
+
+    ports:
+      - 7171:7171
+
+    image: kelvinkeegen17/crud-ui-app
+
+    container_name: rest_api_ui
+
+    depends_on:
+      - backend
+
+    restart: unless-stopped
