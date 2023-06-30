@@ -3,7 +3,6 @@ package com.appsbykeegan.backendcrudrestapi.service;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.DepartmentRequestBody;
 import com.appsbykeegan.backendcrudrestapi.entity.models.records.ResponseTemplate;
 import com.appsbykeegan.backendcrudrestapi.entity.tables.DepartmentEntity;
-import com.appsbykeegan.backendcrudrestapi.entity.tables.EmployeeEntity;
 import com.appsbykeegan.backendcrudrestapi.repository.DepartmentRepository;
 import com.appsbykeegan.backendcrudrestapi.utility.MyUtilityClass;
 import jakarta.persistence.EntityExistsException;
@@ -26,7 +25,7 @@ public class DepartmentService {
     public ResponseTemplate createDepartmentEntry(DepartmentRequestBody departmentRequestBody) {
 
         DepartmentEntity department = new DepartmentEntity(
-                departmentRequestBody.departmentName(),
+                departmentRequestBody.departmentName().toUpperCase(),
                 departmentRequestBody.departmentFloorNumber(),
                 departmentRequestBody.departmentDescription(),
                 departmentRequestBody.departmentBudget(),
@@ -35,7 +34,7 @@ public class DepartmentService {
 
         String deptName = departmentRequestBody.departmentName();
 
-        Optional<DepartmentEntity> optionalDepartment = departmentRepository.findByDepartmentName(deptName);
+        Optional<DepartmentEntity> optionalDepartment = departmentRepository.findByDepartmentName(deptName.toUpperCase());
 
         if (optionalDepartment.isPresent()){
 
@@ -52,7 +51,7 @@ public class DepartmentService {
 
         if (name != null) {
 
-            DepartmentEntity department = departmentRepository.findByDepartmentName(name)
+            DepartmentEntity department = departmentRepository.findByDepartmentName(name.toUpperCase())
                     .orElseThrow(NoSuchElementException::new);
 
             return new ResponseTemplate(HttpStatus.OK.value(),"returned Object",department);
@@ -65,13 +64,9 @@ public class DepartmentService {
 
     public ResponseTemplate updateDepartmentObject(DepartmentRequestBody departmentRequestBody) {
 
-        DepartmentEntity department = departmentRepository.findByDepartmentName(departmentRequestBody.departmentName())
+        DepartmentEntity department = departmentRepository.findByDepartmentName(departmentRequestBody.departmentName().toUpperCase())
                 .orElseThrow(NoSuchElementException::new);
 
-        if (departmentRequestBody.departmentName() != null) {
-
-            department.setDepartmentName(departmentRequestBody.departmentName());
-        }
         if (departmentRequestBody.departmentFloorNumber() != 0) {
 
             department.setDepartmentFloorNumber(departmentRequestBody.departmentFloorNumber());
@@ -92,7 +87,7 @@ public class DepartmentService {
 
     public ResponseTemplate deleteDepartmentObject(String name, Long id) {
 
-        DepartmentEntity department = departmentRepository.findByDepartmentName(name)
+        DepartmentEntity department = departmentRepository.findByDepartmentName(name.toUpperCase())
                 .orElseThrow(NoSuchElementException::new);
 
         departmentRepository.delete(department);

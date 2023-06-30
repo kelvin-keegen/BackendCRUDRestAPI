@@ -29,7 +29,7 @@ public class EmployeeService {
         String emailOfEmployee = employeeRequestBody.emailAddress();
         String deptName = employeeRequestBody.departmentName();
 
-        optionalDepartment = departmentRepository.findByDepartmentName(deptName);
+        optionalDepartment = departmentRepository.findByDepartmentName(deptName.toUpperCase());
 
         if (optionalDepartment.isEmpty()){
 
@@ -43,11 +43,11 @@ public class EmployeeService {
                 employeeRequestBody.employeeGender(),
                 myUtilityClass.getServerCurrentTime(),
                 employeeRequestBody.employeeRole(),
-                employeeRequestBody.emailAddress(),
+                employeeRequestBody.emailAddress().toLowerCase(),
                 optionalDepartment.get()
         );
 
-        Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findByEmailAddress(emailOfEmployee);
+        Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findByEmailAddress(emailOfEmployee.toLowerCase());
 
         if (optionalEmployeeEntity.isPresent()){
 
@@ -66,7 +66,7 @@ public class EmployeeService {
     public ResponseTemplate retrieveEmployeeObject(String email, Boolean returnAll) {
 
         if (email != null) {
-            EmployeeEntity employee = employeeRepository.findByEmailAddress(email)
+            EmployeeEntity employee = employeeRepository.findByEmailAddress(email.toLowerCase())
                     .orElseThrow(NoSuchElementException::new);
 
             return new ResponseTemplate(HttpStatus.OK.value(),"returned object",employee);
@@ -83,7 +83,7 @@ public class EmployeeService {
 
         if (!email.isEmpty()) {
 
-            employee = employeeRepository.findByEmailAddress(email)
+            employee = employeeRepository.findByEmailAddress(email.toLowerCase())
                     .orElseThrow(NoSuchElementException::new);
         }
 
@@ -116,7 +116,7 @@ public class EmployeeService {
 
         if (!email.isEmpty()) {
 
-            employee = employeeRepository.findByEmailAddress(email)
+            employee = employeeRepository.findByEmailAddress(email.toLowerCase())
                     .orElseThrow(NoSuchElementException::new);
         }
 
