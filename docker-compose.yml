@@ -47,6 +47,9 @@ services:
 
     container_name: rest_api_ui
 
+    environment:
+      api-url: backend:7070
+
     depends_on:
       - backend
 
