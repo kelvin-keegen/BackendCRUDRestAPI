@@ -6,4 +6,3 @@
                                                           |_|
 Built & Designed by AppsByKeegan
 Powered by Spring-Boot ${spring-boot.version}
-

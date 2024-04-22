@@ -88,19 +88,4 @@ public class RestAPIController {
         return employeeService.deleteEmployeeObject(email);
     }
 
-    // ### Generic endpoints ###
-
-    // empty json object of Department
-    @GetMapping(path = "/department/retrieve_mock")
-    public ResponseTemplate retrieveDepartment_mock() {
-
-        return new ResponseTemplate(HttpStatus.OK.value(),"", new DepartmentEntity(null,0,null,null,null));
-    }
-
-    // empty json object of Employee
-    @GetMapping(path = "/employee/retrieve_mock")
-    public ResponseTemplate retrieveEmployee_mock() {
-
-        return new ResponseTemplate(HttpStatus.OK.value(),"", new EmployeeEntity(null,null,null,null,null,null,null));
-    }
 }
