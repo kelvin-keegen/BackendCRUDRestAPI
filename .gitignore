@@ -33,3 +33,4 @@ build/
 .vscode/
 
 ### appsbykeegan ###
+.db_data
