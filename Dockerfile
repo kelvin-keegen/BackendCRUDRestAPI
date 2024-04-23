@@ -9,6 +9,7 @@
 ################################################################################
 
 # Create a stage for resolving and downloading dependencies.
+ARG TARGET_PLATFORMS
 FROM eclipse-temurin:21-jdk-jammy as deps
 
 WORKDIR /build
@@ -51,6 +52,9 @@ RUN --mount=type=bind,source=pom.xml,target=pom.xml \
 FROM package as extract
 
 WORKDIR /build
+
+# Integration point (before copying JAR)
+FROM --platform $TARGET_PLATFORMS
 
 RUN java -Djarmode=layertools -jar target/app.jar extract --destination target/extracted
 

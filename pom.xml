@@ -64,6 +64,42 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <!-- Docker Build goal -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.9</version> <!-- Or the latest version -->
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>package</phase> <!-- Or any phase you prefer -->
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <buildArgs>
+                                <TARGET_PLATFORMS>linux/amd64,linux/arm64</TARGET_PLATFORMS> <!-- Or any platform you want -->
+                            </buildArgs>
+                            <tag>${project.version}</tag>
+                            <repository>your-dockerhub-username/your-image-name</repository>
+                            <contextDirectory>${project.basedir}</contextDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+<!--            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.44.0</version>
+                <configuration>
+                    <buildArgs>
+                        <buildArg>TARGET_PLATFORMS=linux/amd64,linux/arm64</buildArg>
+                    </buildArgs>
+                </configuration>
+            </plugin>-->
+
         </plugins>
         <finalName>BackendCRUDRestAPI</finalName>
     </build>
