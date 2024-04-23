@@ -15,7 +15,7 @@ services:
   backend:
     ports:
       - 7070:7070
-    image: kelvinkeegen17/crud-rest-api
+    image: kelvinkeegen17/crud-rest-api:latest
     container_name: rest_api
     environment:
       db-url: jdbc:postgresql://db:5432/company_db
@@ -28,7 +28,7 @@ services:
   frontend:
     ports:
       - 7171:7171
-    image: kelvinkeegen17/crud-ui-app
+    image: kelvinkeegen17/crud-ui-app:latest
     container_name: rest_api_ui
     environment:
       api-url: backend:7070
